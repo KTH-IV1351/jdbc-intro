@@ -39,10 +39,9 @@ public class BasicJdbc {
   }
 
   private Connection createConnection() throws SQLException, ClassNotFoundException {
-    Class.forName("org.apache.derby.jdbc.ClientXADataSource");
-    return DriverManager.getConnection("jdbc:derby://localhost:1527/MySampleDatabase", "jdbc",
-        "jdbc");
-
+    Class.forName("org.postgresql.Driver");
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/simplejdbc", "postgres",
+        "postgres");
   }
 
   private void createTable(Connection connection) {
