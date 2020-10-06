@@ -40,15 +40,19 @@ public class BasicJdbc {
 
   private Connection createConnection() throws SQLException, ClassNotFoundException {
     Class.forName("org.postgresql.Driver");
-    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/simplejdbc", "postgres",
-        "postgres");
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/simplejdbc",
+      "postgres", "postgres");
+    // Class.forName("com.mysql.cj.jdbc.Driver");
+    // return DriverManager.getConnection(
+    // "jdbc:mysql://localhost:3306/simplejdbc?serverTimezone=UTC",
+    // "root", "javajava");
   }
 
   private void createTable(Connection connection) {
     try (Statement stmt = connection.createStatement()) {
       if (!tableExists(connection)) {
-        stmt.executeUpdate("create table " + TABLE_NAME
-            + " (name varchar(32) primary key, phone varchar(12), age int)");
+        stmt.executeUpdate(
+            "create table " + TABLE_NAME + " (name varchar(32) primary key, phone varchar(12), age int)");
       }
     } catch (SQLException sqle) {
       sqle.printStackTrace();
@@ -70,8 +74,8 @@ public class BasicJdbc {
   private void listAllRows() {
     try (ResultSet persons = findAllPersonsStmt.executeQuery()) {
       while (persons.next()) {
-        System.out.println("name: " + persons.getString(1) + ", phone: " + persons.getString(2)
-            + ", age: " + persons.getInt(3));
+        System.out.println(
+            "name: " + persons.getString(1) + ", phone: " + persons.getString(2) + ", age: " + persons.getInt(3));
       }
     } catch (SQLException sqle) {
       sqle.printStackTrace();
@@ -79,8 +83,7 @@ public class BasicJdbc {
   }
 
   private void prepareStatements(Connection connection) throws SQLException {
-    createPersonStmt =
-        connection.prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?)");
+    createPersonStmt = connection.prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?)");
     findAllPersonsStmt = connection.prepareStatement("SELECT * from " + TABLE_NAME);
     deletePersonStmt = connection.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE name = ?");
   }
